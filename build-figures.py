@@ -82,9 +82,9 @@ def refresh_metrics(root):
             "duration_reduction_percent": (1 - groups[2]["total_seconds"] / groups[1]["total_seconds"]) * 100,
         },
         "notes": [
-            "质量分为既有整体评分，逐任务原始记录中的score为空；不得作显著性或逐任务质量判断。",
+            "质量评分沿用既有报告汇总，逐任务原始记录中的score为空。",
             "开销按session_total_tokens和duration_seconds汇总，不使用末次调用total_tokens。",
-            "三组各140个对应任务；运行日期不同，同模型标识不代表所有实验条件完全固定。",
+            "三组各140个对应任务，使用相同模型标识，运行日期不同。",
             "Token不等于账单；平均任务耗时不等于批次墙钟时间；部分失败重试的完整开销不可确认。",
         ],
     }
@@ -150,7 +150,7 @@ def save(fig, stem):
 
 
 def capability_boundary():
-    fig, ax = canvas(1, "按增量价值，重新分配Skill的职责", "规则判断框架：以下分类用于设计与复评，并非模型训练变化的实测结果。")
+    fig, ax = canvas(1, "按增量价值，重新分配Skill的职责", "按收益、成本与适用条件，调整模型和Skill各自承担的工作。")
     cards = [
         (.8, "通用分析指导", "任务拆解、计划、自我检查\n模型已能稳定完成时\n尝试减少固定步骤", BLUE, "#F0F5FA"),
         (5.7, "稳定的重复操作", "读取环境、构建、执行测试\n操作稳定且反复发生时\n整合为可检查的脚本", GREEN, "#F0F7F3"),
@@ -192,7 +192,7 @@ def evolution_path():
 
 
 def comparison(metrics):
-    fig, ax = canvas(2, "报告评分接近，记录中的开销下降", "三组各140个对应任务；缺少逐任务质量分与重复运行，无法判断质量等价。")
+    fig, ax = canvas(2, "整体评分相近，执行开销明显下降", "三组各140个对应任务，比较无Skill、旧版Skill与新版Skill的质量和开销。")
     groups = metrics["groups"]
     colors = ["#ADB9BF", ORANGE, GREEN]
     panels = [
