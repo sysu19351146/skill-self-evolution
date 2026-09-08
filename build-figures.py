@@ -101,7 +101,6 @@ def canvas(number, title, subtitle):
     fig = plt.figure(figsize=(16, 9), facecolor=BG)
     ax = fig.add_axes([0, 0, 1, 1], xlim=(0, 16), ylim=(0, 9))
     ax.axis("off")
-    text(ax, .65, 8.48, f"{number:02d} / SKILL SELF-EVOLUTION", 12, GREEN, "bold")
     text(ax, .65, 7.93, title, 27, weight="bold")
     text(ax, .65, 7.35, subtitle, 14, MUTED)
     ax.plot([.65, 15.35], [6.96, 6.96], color="#D6DEDD", lw=1)
