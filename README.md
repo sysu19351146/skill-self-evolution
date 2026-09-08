@@ -1,49 +1,40 @@
 # Skill自进化文章包
 
-`source.md`是最终正文，保留模型通过后训练逐步内化通用方法、Skill需要重新评估冗余这一主题。主体采用实证主线：RQ1比较完整Skill与无Skill的质量和成本，RQ2比较流程精简、脚本整合与约束补强后的变化，RQ3提炼可供其他Skill参考的自进化流程，说明如何建立对照、修改规则、验证效果并更新版本；这是方法推广建议，并非已完成的跨Skill实验。完整Skill明确指旧版完整流程。每个RQ先以RA给出回答，再展开证据与机制。现有数据是同模型标识下的Skill对比，没有被写成跨模型或后训练因果实验。头部YAML用于保存标题等发布元信息；粘贴到不支持YAML的论坛时，将`title`作为帖子标题，移除首尾`---`之间的元信息。
+`source.md`是正文，`review.md`记录本轮全文与配图审查、修改理由和证据边界。正文保留RQ/RA结构，主线是规则在当前模型、任务与环境下的增量价值，以及规则的加入、复用和退出条件。
 
-正文没有参考资料列表、脚注、数据来源段落或外部超链接；图片采用相对路径嵌入。发布到论坛时上传对应PNG，并替换图片位置即可。
+RQ1比较完整Skill与无Skill的收益和成本；RQ2解释新版的组合改动与实测变化；RQ3提出执行反馈、独立验收与版本回退的更新机制。RQ3属于迁移建议，未写成已完成的跨Skill实验或全自动系统。同模型对照不用于证明后训练因果关系。
+
+正文保留相对路径配图，不添加外部参考资料列表。头部YAML保存发布元信息；粘贴到不支持YAML的平台时，以`title`作为帖子标题并移除元信息，上传四张PNG后替换图片路径。
 
 ## 文件组织
 
-```text
-skill-self-evolution/
-├── source.md
-├── assets/
-│   ├── 01-model-skill-boundary.png / .svg
-│   ├── 02-quality-cost-comparison.png / .svg
-│   ├── 03-evolution-path.png / .svg
-│   ├── 04-information-lifecycle.png / .svg
-│   └── data/
-│       └── metrics.json
-├── prompts/
-│   ├── 01-model-skill-boundary.md
-│   ├── 03-evolution-path.md
-│   └── 04-information-lifecycle.md
-├── build-figures.py
-└── README.md
-```
+- `source.md`：修订后的正文。
+- `review.md`：审查结论、证据定位与尚缺的实验材料。
+- `assets/01-model-skill-boundary.png / .svg`：职责与规则价值判断框架。
+- `assets/02-quality-cost-comparison.png / .svg`：三组数值比较与开销负例。
+- `assets/03-evolution-path.png / .svg`：六阶段顺序与后续复评路径。
+- `assets/04-information-lifecycle.png / .svg`：执行反馈与独立验收机制。
+- `assets/data/metrics.json`：可携带的数据快照与口径说明。
+- `build-figures.py`：四图的Matplotlib源代码。
+- `prompts/`：三张机制图的可选白板提示词，已同步当前内容，未调用AI绘图。
 
-## 两个Skill的应用
-
-- `keven-blog`：使用用户更新并重新安装的版本；先给出判断，再由具体运行现象解释机制；限制对特定单测Skill的展开；清理中英文间空格、套话与否定式排比，并按新增P0规则检查意义拔高、模糊归因和机械节奏。
-- `whiteboard-infographic`：为模型与Skill的职责划分、六阶段路径和信息使用机制分别编写完整白板提示词，包含布局、图标、配色、中文标注、箭头含义和总结公式。
-
-正文已经嵌入四张实际PNG，不依赖后续生成。当前机制图由脚本绘制，白板提示词是可选的视觉替换方案，尚未用于调用AI绘图。数据图使用Matplotlib绘制，避免生成模型改动数值。SVG保留矢量输出，可用于后续排版。
+正文按keven-blog指南修订；备用提示词按whiteboard-infographic指南整理。实际PNG/SVG由脚本绘制，保留可编辑源代码；图2数值直接读取数据快照。
 
 ## 重建配图
 
-需要Python、Matplotlib和支持中文的字体。脚本在Windows上自动选用微软雅黑，也支持安装了Noto Sans CJK SC的环境。
+需要Python、Matplotlib和中文字体。脚本在Windows上优先选择微软雅黑，也支持Noto Sans CJK SC。
 
 ```powershell
 python -m pip install matplotlib
 python build-figures.py
 ```
 
-在原工作区内，可重新汇总三组会话数据：
+要从原始JSONL重新汇总，显式指定包含三个输入文件的目录：
 
 ```powershell
-python build-figures.py --refresh-metrics
+python build-figures.py --refresh-metrics --metrics-root 'D:\wzh\gitcode\paper-writing-9-4'
 ```
 
-脚本核对140个唯一任务、三组配对集合和会话Token字段，质量评分使用既有整体结果。统计口径与局限保存在`assets/data/metrics.json`中，不作为正文数据来源段落发布。
+目录需要包含`token_noskill.jsonl`、`token_metrics.jsonl`和`token_newskill.jsonl`。不提供原始目录也可以用随包快照重建四图。
+
+脚本核对三组各140个唯一任务、7个项目、配对集合、模型标识和会话输入输出字段，复算Token、耗时、上升/下降任务数及节省量的输入侧占比。质量评分沿用既有报告值，不从空的逐任务评分字段推算。过程指标与项目组评分的出处记录在`review.md`。
