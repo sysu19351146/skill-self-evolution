@@ -1,0 +1,55 @@
+{
+  "groups": [
+    {
+      "key": "baseline",
+      "label": "无Skill",
+      "tasks": 140,
+      "quality_score": 88.84,
+      "total_tokens": 87187445,
+      "mean_tokens": 622767.4642857143,
+      "total_seconds": 104811.56,
+      "mean_minutes": 12.477566666666666,
+      "models": [
+        "maas-glm-5.2-aliyun"
+      ]
+    },
+    {
+      "key": "old",
+      "label": "旧版Skill",
+      "tasks": 140,
+      "quality_score": 93.68,
+      "total_tokens": 542586669,
+      "mean_tokens": 3875619.064285714,
+      "total_seconds": 299576.54,
+      "mean_minutes": 35.66387380952381,
+      "models": [
+        "maas-glm-5.2-aliyun"
+      ]
+    },
+    {
+      "key": "new",
+      "label": "新版Skill",
+      "tasks": 140,
+      "quality_score": 94.03,
+      "total_tokens": 174358483,
+      "mean_tokens": 1245417.7357142856,
+      "total_seconds": 179215.46,
+      "mean_minutes": 21.335173809523805,
+      "models": [
+        "maas-glm-5.2-aliyun"
+      ]
+    }
+  ],
+  "paired": {
+    "token_decreased": 135,
+    "duration_decreased": 126,
+    "token_reduction_percent": 67.86532125432664,
+    "duration_reduction_percent": 40.17707127534085
+  },
+  "notes": [
+    "质量分为既有整体评分，逐任务原始记录中的score为空；不得作显著性或逐任务质量判断。",
+    "开销按session_total_tokens和duration_seconds汇总，不使用末次调用total_tokens。",
+    "三组各140个对应任务；运行日期不同，同模型标识不代表所有实验条件完全固定。",
+    "Token不等于账单；平均任务耗时不等于批次墙钟时间；部分失败重试的完整开销不可确认。"
+  ]
+}
