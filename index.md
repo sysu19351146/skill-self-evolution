@@ -1,14 +1,14 @@
 ---
-title: "当模型比你更懂流程：别让旧Skill成为AI的“赛博枷锁”？"
+title: "当模型比你更懂流程：别让旧Skill成为AI的“赛博枷锁”"
 date: 2026-09-07
-description: "从存量代码补齐UT的三组实测出发，讨论Skill规则的增量价值、流程成本，以及如何用数据集支撑持续进化。"
+description: "从存量代码补齐UT的三组实测出发，讨论Skill规则的增量价值、流程成本与验证边界，以及经验如何在模型变化后继续有效。"
 status: ready
 slug: "skill-self-evolution"
 ---
 
 随着Fable 5、5.1和GPT-6 Astra相继发布，Skill的维护开始面临一个变化：模型能够自行完成的工作越来越多，以前为旧模型补齐能力的流程说明，需要重新检查。**当模型已经能判断下一步怎么做，Skill里仍然写死的逐步流程，就可能从经验积累变成每次执行都要支付的成本。**
 
-官方的提示指南已经明确提出了这个问题。Anthropic在[Fable 5提示指南](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5#recommended-scaffolding-changes)中指出，为旧模型开发的Skill往往规定得过细，可能降低输出质量；如果模型默认表现更好，就应考虑移除旧指令。OpenAI在[GPT-6 Astra使用指南](https://developers.openai.com/api/docs/guides/latest-model#instruction-following)中也建议审查Skill和AGENTS.md：Astra对这些文件里的指令更敏感，模糊或冲突的要求可能让它提前停下来，阻断本来可以继续完成的工作。
+官方的提示指南已经明确提出了这个问题。Anthropic在[Fable 5提示指南](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5#recommended-scaffolding-changes)中指出，为旧模型开发的Skill往往规定得太细，可能降低输出质量；如果模型默认表现更好，就应考虑移除旧指令。OpenAI在[GPT-6 Astra使用指南](https://developers.openai.com/api/docs/guides/latest-model#instruction-following)中也建议审查Skill和AGENTS.md：Astra对这些文件里的指令更敏感，模糊或冲突的要求可能让它提前停下来，阻断本来可以继续完成的工作。
 
 这背后有两种变化：模型更能自行组织工作，也更认真地执行外部约束。过去为了防止遗漏而写下的全量预读、逐步汇报和固定验证轮次，即使在当前任务中没有必要，也可能被完整执行。例如，一次局部修改本来只需读取相关文件、运行受影响的测试，旧规则却可能要求它重新梳理整个项目、更新中间报告，再跑一遍全量测试。流程照常完成，额外的质量收益却需要重新证明。
 
@@ -125,7 +125,7 @@ Apollo组中，模型在无Skill条件下已经取得较高评分，使用优化
 
 中间产物写入或修改次数明显减少，顶层工具调用也随之下降。新版加载Skill的次数从362次增加到419次，但每次返回的内容平均从22.7K字符缩短到4.9K字符。加载次数增加，并没有抵消单次加载内容精简带来的开销改善。
 
-原始记录中，旧版到新版减少的Token约98.3%来自输入侧。这些输入包括Skill说明、源码、工具结果和历史对话，与减少重复说明、报告及工具交互的调整方向一致。整体质量与成本的对照结果如下：
+根据记录汇总，旧版到新版减少的Token约98.3%来自输入侧。这些输入包括Skill说明、源码、工具结果和历史对话，与减少重复说明、报告及工具交互的调整方向一致。整体质量与成本的对照结果如下：
 
 | 指标 | 优化前Skill | 优化后Skill | 变化 |
 | --- | ---: | ---: | ---: |
@@ -133,7 +133,7 @@ Apollo组中，模型在无Skill条件下已经取得较高评分，使用优化
 | 累计会话Token | 5.426亿 | 1.744亿 | −67.9% |
 | 平均任务耗时 | 35.7分钟 | 21.3分钟 | −40.2% |
 
-新版平均每任务约124.5万Token，仍为无Skill组的2倍，但已明显低于旧版的387.6万Token。几类修改共同构成了这次新版Skill，上述数据反映的是整轮调整的效果，尚不能据此分配每项改动各自带来的收益。
+新版平均每任务约124.5万Token，仍为无Skill组的2倍，但已明显低于旧版的387.6万Token。
 
 ![三组质量评分、会话Token与平均耗时对比：新版开销下降，整体评分相近。](assets/02-quality-cost-comparison-whiteboard.png)
 
@@ -178,7 +178,7 @@ Apollo组中，模型在无Skill条件下已经取得较高评分，使用优化
 
 模型再次升级后，可以从版本记录中找出为弥补旧模型不足而加入的规则，再用实际任务检查新模型是否仍然需要这些指导。如果省去某些步骤后仍能达到交付要求，就把精简后的流程写回Skill。这样，后续任务就能少做已经不再需要的重复工作。
 
-## 结语：让skill进化跟上模型的进步
+## 结语：让Skill进化跟上模型的进步
 
 这次单元测试优化通过精简流程、整合脚本和补充交付检查，在整体评分相近的情况下，让累计Token下降67.9%、平均耗时下降40.2%。这些结果让我们看到，围绕模型建立的工作流程，本身也有持续优化的空间。
 
